@@ -124,7 +124,7 @@ const documentRes = await embeddings.embedDocuments(["Hello world", "Bye bye"]);
 console.log(documentRes);
 ```
 
-儲存
+儲存至向量資料庫
 ```js
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import { embeddingModel } from '../../utils/utils.mjs';

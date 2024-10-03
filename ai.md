@@ -92,10 +92,8 @@ query routing：查詢路由，使用者所需要的數據可能並非只會從�
 
 https://www.nature.com/nature/volumes
 
-  
 
 切割
-
 ```js
 import { CharacterTextSplitter } from 'langchain/text_splitter';
 
@@ -141,7 +139,8 @@ const res = await vectorstore.similaritySearch('hello', 1);
 console.log(res);
 ```
 
-實現 query routing
+query routing
+https://js.langchain.com/docs/how_to/routing/
 
   
 

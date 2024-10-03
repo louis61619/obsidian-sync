@@ -99,9 +99,12 @@ import { CharacterTextSplitter } from 'langchain/text_splitter';
 
 const text = `
 Hi.
-I'm Louis
+I'm KKKKKKKK
 How? Are? you?
 Okay then dfiffi.
+122223334444
+what do you do?
+what is the wheather?
 `;
 
 const splitter = new CharacterTextSplitter({
@@ -139,7 +142,47 @@ const res = await vectorstore.similaritySearch('hello', 1);
 console.log(res);
 ```
 
-query routing
+使用向量資料庫實現RAG
+https://js.langchain.com/docs/integrations/vectorstores/hanavector/#using-a-vectorstore-as-a-retriever-in-chains-for-retrieval-augmented-generation-rag
+```js
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
+import { createRetrievalChain } from 'langchain/chains/retrieval';
+import { chatModel } from '../../utils/utils.mjs';
+import { loadedVectorStore } from './close-vector-load.mjs';
+
+const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
+  [
+    'system',
+    'You are an expert in state of the union topics. You are provided multiple context items that are related to the prompt you have to answer. Use the following pieces of context to answer the question at the end.\n\n{context}',
+  ],
+  ['human', '{input}'],
+]);
+
+const combineDocsChain = await createStuffDocumentsChain({
+  llm: chatModel,
+  prompt: questionAnsweringPrompt,
+});
+
+
+const chain = await createRetrievalChain({
+  retriever: loadedVectorStore.asRetriever(),
+  combineDocsChain,
+});
+
+  
+
+const response = await chain.invoke({
+  input: 'Who is the article about?',
+});
+
+  
+console.log('Chain response:');
+
+console.log(response.answer);
+```
+
+基於 query routing 實現多情境處理
 https://js.langchain.com/docs/how_to/routing/
 
   

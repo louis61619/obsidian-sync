@@ -182,9 +182,35 @@ console.log('Chain response:');
 console.log(response.answer);
 ```
 
-基於 query routing 實現多情境處理
+使用語意對比實現 query routing
 https://js.langchain.com/docs/how_to/routing/
+```js
+const descrip1 = `
+  了解金額相關計算，包含勞基法、公司薪資、獎金加給等等
+`;
 
+const descrip2 = `
+  了解員工的信息
+`;
+
+const embeddings = embeddingModel;
+
+const templates = [descrip1, descrip2];
+
+const templateEmbeddings = await embeddings.embedDocuments(templates);
+
+const queryEmbedding = await embeddings.embedQuery(query);
+
+const r = cosineSimilarity([queryEmbedding], templateEmbeddings);
+const similarity = r[0];
+const isDesrip1 = similarity[0] > similarity[1];
+
+if (isDesrip1) {
+	console.log(descrip1);
+} else {
+	console.log(descrip2);
+}
+```
   
 
 ### 參考資料

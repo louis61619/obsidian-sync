@@ -96,9 +96,50 @@ https://www.nature.com/nature/volumes
 
 切割
 
+```js
+import { CharacterTextSplitter } from 'langchain/text_splitter';
+
+const text = `
+Hi.
+I'm Louis
+How? Are? you?
+Okay then dfiffi.
+`;
+
+const splitter = new CharacterTextSplitter({
+  separator: '\n', // 分割符
+  chunkSize: 20, // 分割的塊的size
+  chunkOverlap: 6, // 分割的塊增加一些信息的冗餘
+});
+
+const output = await splitter.createDocuments([text]);
+
+console.log(output);
+```
+
 向量化
+```js
+import { embeddingModel } from '../../utils/utils.mjs';
+
+const documentRes = await embeddings.embedDocuments(["Hello world", "Bye bye"]);
+
+console.log(documentRes);
+```
 
 儲存
+```js
+import { MemoryVectorStore } from 'langchain/vectorstores/memory';
+import { embeddingModel } from '../../utils/utils.mjs';
+
+const vectorstore = await MemoryVectorStore.fromTexts(
+  ['Hello world', 'Bye Bye', 'nice world'],
+  [{ id: 2 }, { id: 1 }, { id: 3 }],
+  embeddingModel,
+);
+
+const res = await vectorstore.similaritySearch('hello', 1);
+console.log(res);
+```
 
 實現 query routing
 
